@@ -1,0 +1,52 @@
+name: abap2xlsx-mirror
+
+on:
+  workflow_dispatch:        # Manuel tetikleme
+
+permissions:
+  contents: write           # Kod pushlamak için gerekli
+  pull-requests: write      # PR açmak için gerekli
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout local repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout upstream repo (abap2xlsx)
+        run: |
+          git clone https://github.com/abap2xlsx/abap2xlsx.git upstream
+          mkdir -p src/abap2xlsx
+          cp -r upstream/src/* src/abap2xlsx/
+
+      - name: Rename ABAP objects
+        uses: abap2xlsx/abap2xlsx-rename-action@main
+        with:
+          folder: 'src/abap2xlsx'
+          patterns: |
+            [
+              {"type":"CLAS|INTF","oldName":"z(.*)_excel","newName":"z$1_fac_excel"},
+              {"type":"DTEL|DOMA|TABL|TTYP","oldName":"zexcel_","newName":"zfac_excel_"},
+              {"type":"MSAG","oldName":"zabap2xlsx","newName":"zfac_excel"}
+            ]
+
+      - name: Commit renamed sources
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git diff --quiet && echo "No changes" || git commit -m "Renamed ABAP objects from upstream"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "Auto-update from upstream abap2xlsx"
+          branch: automatic/abap2xlsx-update
+          body: |
+            This PR updates ABAP sources from upstream and renames them to Y-prefix.
+            Generated automatically via GitHub Actions.
