@@ -20,7 +20,7 @@ jobs:
 
       - name: Checkout upstream repo (abap2xlsx)
         run: |
-          git clone https://github.com/abap2xlsx/abap2xlsx.git upstream
+          git clone https://github.com/abdullahatan/abap2xlsx.git upstream
           mkdir -p src/abap2xlsx
           cp -r upstream/src/* src/abap2xlsx/
 
