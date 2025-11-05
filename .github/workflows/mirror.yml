@@ -30,8 +30,8 @@ jobs:
           folder: 'src/abap2xlsx'
           patterns: |
             [
-              {"type":"CLAS|INTF","oldName":"z(.*)_excel","newName":"z$1_fac_excel"},
-              {"type":"DTEL|DOMA|TABL|TTYP","oldName":"zexcel_","newName":"zfac_excel_"},
+              {"type":"CLAS|INTF","oldName":"z(.*)_excel","newName":"z$1_facex"},
+              {"type":"DTEL|DOMA|TABL|TTYP","oldName":"zexcel_","newName":"zfacex_"},
               {"type":"MSAG","oldName":"zabap2xlsx","newName":"zfac_excel"}
             ]
 
