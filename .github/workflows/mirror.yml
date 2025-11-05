@@ -27,7 +27,7 @@ jobs:
       - name: Rename ABAP objects
         uses: abap2xlsx/abap2xlsx-rename-action@main
         with:
-          folder: 'src/abap2xlsx'
+          folder: 'src/abap2xlsx/not_cloud'
           patterns: |
             [
               {"type":"CLAS|INTF","oldName":"z(.*)_excel","newName":"z$1_facex"},
